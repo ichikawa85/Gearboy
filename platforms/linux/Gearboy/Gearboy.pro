@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui websockets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,6 +14,7 @@ TARGET = Gearboy
 TEMPLATE = app
 
 INCLUDEPATH += /usr/local/include
+INCLUDEPATH += /usr/include
 DEPENDPATH += /usr/local/lib
 
 LIBS += -L/usr/local/lib -lSDL2main -lSDL2 \
@@ -54,7 +55,8 @@ SOURCES += \
     ../../qt-shared/MainWindow.cpp \
     ../../qt-shared/RenderThread.cpp \
     ../../qt-shared/SoundSettings.cpp \
-    ../../qt-shared/VideoSettings.cpp
+    ../../qt-shared/VideoSettings.cpp \
+    ../../../src/websocket/echoserver.cpp 
 
 HEADERS  += \
     ../../../src/audio/blargg_common.h \
@@ -99,7 +101,8 @@ HEADERS  += \
     ../../qt-shared/MainWindow.h \
     ../../qt-shared/RenderThread.h \
     ../../qt-shared/SoundSettings.h \
-    ../../qt-shared/VideoSettings.h
+    ../../qt-shared/VideoSettings.h \
+    ../../../src/websocket/echoserver.h
 
 FORMS    += \
     ../../qt-shared/About.ui \

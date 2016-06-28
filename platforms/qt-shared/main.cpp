@@ -17,6 +17,12 @@
  * 
  */
 
+#include <QtCore/QCoreApplication>
+#include <QtCore/QCommandLineParser>
+#include <QtCore/QCommandLineOption>
+#include "../../src/websocket/echoserver.h"
+
+
 #include <QApplication>
 #include "MainWindow.h"
 #ifdef Q_WS_X11
@@ -29,6 +35,7 @@ int main(int argc, char *argv[])
     XInitThreads();
 #endif
     QApplication a(argc, argv);
+    //QCoreApplication a(argc, argv);
 
     if (argc > 2)
     {
@@ -44,6 +51,27 @@ int main(int argc, char *argv[])
     {
         w.InitalGameBoyLoadROM(argv[1]);
     }
+
+    /* For WebSocket Preparetion */
+    
+    QCommandLineParser parser;
+    parser.setApplicationDescription("QtWebSockets example: echoserver");
+    parser.addHelpOption();
+
+    QCommandLineOption dbgOption(QStringList() << "d" << "debug",
+            QCoreApplication::translate("main", "Debug output [default: off]."));
+    parser.addOption(dbgOption);
+    QCommandLineOption portOption(QStringList() << "p" << "port",
+            QCoreApplication::translate("main", "Port for echoserver [default: 1234]."),
+            QCoreApplication::translate("main", "port"), QLatin1Literal("1234"));
+    parser.addOption(portOption);
+    parser.process(a);
+    bool debug = parser.isSet(dbgOption);
+    int port = parser.value(portOption).toInt();
+
+    EchoServer *server = new EchoServer(port, debug);
+    QObject::connect(server, &EchoServer::closed, &a, &QCoreApplication::quit);
+
 
     return a.exec();
 }
